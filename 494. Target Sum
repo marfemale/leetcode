@@ -1,0 +1,15 @@
+class Solution(object):
+    def findTargetSumWays(self, nums, S):
+        """
+        :type nums: List[int]
+        :type S: int
+        :rtype: int
+        """
+        l=len(nums)
+        dp=[collections.defaultdict(int) for _ in range(l+1)]
+        dp[0][0]=1
+        for i,num in enumerate(nums):
+            for s,r in dp[i].items():
+                dp[i+1][s+num]+=r
+                dp[i+1][s-num]+=r
+        return dp[l][S]
