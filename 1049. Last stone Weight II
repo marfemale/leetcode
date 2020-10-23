@@ -6,18 +6,9 @@ class Solution(object):
         """
         s=sum(stones)/2
         n=len(stones)
-        dp=[[0]*(s+1) for _ in range(n)]
-        for j in range(s+1):
-            if j<stones[0]:
-                dp[0][j]=0
-            else:
-                dp[0][j]=stones[0]
-        for i in range(n):
-            for j in range(s+1):
-                if j<stones[i]:
-                    dp[i][j]=dp[i-1][j]
-                else:
-                    dp[i][j]=max(dp[i-1][j-stones[i]]+stones[i],dp[i-1][j])
-        return abs(sum(stones)-2*dp[n-1][s])
-        
-        
+        dp=[0]*(s+1)
+        for i in stones:
+            for j in range(s,0,-1):
+                if j>=i:
+                    dp[j]=max(dp[j],dp[j-i]+i)
+        return sum(stones)-2*dp[-1]
