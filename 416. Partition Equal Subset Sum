@@ -1,0 +1,17 @@
+class Solution(object):
+    def canPartition(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+        s=sum(nums)
+        q,r=divmod(s,2)
+        if r:
+            return False
+        dp=[0]*(q+1)
+        dp[0]=1
+        for i in nums:
+            for j in range(q,0,-1):
+                if j>=i and dp[j-i]:
+                    dp[j]=1
+        return dp[-1]
