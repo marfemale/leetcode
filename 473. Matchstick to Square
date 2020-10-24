@@ -1,0 +1,26 @@
+class Solution(object):
+    def makesquare(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+        if not nums:
+            return False
+        s=sum(nums)
+        q,r=divmod(s,4)
+        if r:
+            return False
+        target=[q]*4
+        nums.sort(reverse=True)
+        return self.dfs(nums,0,target)
+    def dfs(self,nums,index,target):
+        if index==len(nums):
+            return True
+        n=nums[index]
+        for i in range(4):
+                if target[i]>=n:
+                    target[i]-=n
+                    if self.dfs(nums,index+1,target):
+                        return True
+                    target[i]+=n
+        return False
