@@ -1,0 +1,17 @@
+class Solution(object):
+    def splitArraySameAverage(self, A):
+        """
+        :type A: List[int]
+        :rtype: bool
+        """
+        A.sort(reverse=True)
+        dp={0:0}
+        l,s=len(A),sum(A)
+        for num in A:
+            for k in sorted(dp.keys(),reverse=True):
+                dp[k+num]=dp[k]+1
+                k+=num
+                v=dp[k]
+                if v and l-v and k*(l-v)==(s-k)*v:
+                    return True
+        return False
