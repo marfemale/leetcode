@@ -1,0 +1,12 @@
+class Solution(object):
+    def tallestBillboard(self, rods):
+        """
+        :type rods: List[int]
+        :rtype: int
+        """
+        dp={0:0}
+        for r in rods:
+            for presum,possum in dp.items():
+                dp[presum-r]=max(dp.get(presum-r,0),possum)
+                dp[presum+r]=max(dp.get(presum+r,0),possum+r)
+        return dp[0]
