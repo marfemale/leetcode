@@ -1,0 +1,14 @@
+class Solution:
+    def getMoneyAmount(self, n: int) -> int:
+        @functools.lru_cache(None)
+        def mal(s,e):
+            if s==e:
+                return 0
+            if e-s==1:
+                return s
+            mid=(s+e)//2
+            res=[]
+            for i in range(mid,e):
+                res.append(i+max(mal(s,i-1),mal(i+1,e)))
+            return min(res)
+        return mal(1,n)
