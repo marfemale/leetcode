@@ -1,0 +1,12 @@
+class Solution(object):
+    def stoneGameIII(self, stoneValue):
+        """
+        :type stoneValue: List[int]
+        :rtype: str
+        """
+        n = len(stoneValue)
+        dp = [float('-inf')]*n+[0]*3
+        for i in range(n-1,-1,-1):
+            for k in (1,2,3):
+                dp[i] = max(sum(stoneValue[i:i+k])-dp[i+k],dp[i])
+        return 'Alice' if dp[0]>0 else 'Bob' if dp[0]<0 else 'Tie'
