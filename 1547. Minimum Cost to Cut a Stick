@@ -1,0 +1,11 @@
+class Solution:
+    def minCost(self, n: int, cuts: List[int]) -> int:
+        @functools.lru_cache(None)
+        def dp(l, r, i, j):
+            if i > j :
+                return 0
+            if i == j:
+                return r - l
+            return min(r - l + dp(l, cuts[k], i, k - 1) + dp(cuts[k], r, k + 1, j) for k in range(i, j + 1) )
+        cuts.sort()
+        return dp(0, n, 0, len(cuts) - 1)
