@@ -1,0 +1,14 @@
+class Solution:
+    def maxWidthRamp(self, A: List[int]) -> int:
+        hq= []
+        for i, n in enumerate(A):
+            hq.append((n, i))
+        heapq.heapify(hq)
+        res = 0
+        anchor = inf
+        while hq:
+            n, i = heapq.heappop(hq)
+            anchor = min(anchor, i)
+            if hq:
+                res = max(res, hq[0][1] - anchor)
+        return res
