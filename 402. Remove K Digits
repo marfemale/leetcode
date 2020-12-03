@@ -1,0 +1,19 @@
+class Solution:
+    def removeKdigits(self, num: str, k: int) -> str:
+        queue = deque()
+        for n in num:
+            while queue and queue[-1] > int(n) and k > 0:
+                queue.pop()
+                k -= 1
+            queue.append(int(n))
+        while queue and queue[0] == 0:
+            queue.popleft()
+        while queue and k > 0:
+            queue.pop()
+            k -= 1
+        if not queue:
+            return "0"
+        res = ""
+        for d in queue:
+            res += str(d)
+        return res
