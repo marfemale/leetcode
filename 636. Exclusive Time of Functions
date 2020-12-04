@@ -1,0 +1,17 @@
+class Solution:
+    def exclusiveTime(self, n: int, logs: List[str]) -> List[int]:
+        res = [0] * n
+        stack = []
+        for log in logs:
+            log = log.split(":")
+            if log[1] == "start":
+                if stack:
+                    res[stack[-1]] += int(log[2]) - prev
+                stack.append(int(log[0]))
+                prev = int(log[2])
+            else:
+                res[stack[-1]] += int(log[2]) - prev + 1
+                stack.pop()
+                prev = int(log[2]) + 1
+        return res
+                    
