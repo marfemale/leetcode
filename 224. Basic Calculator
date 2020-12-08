@@ -1,0 +1,22 @@
+class Solution:
+    def calculate(self, s: str) -> int:
+        res, n, sign, stack = 0, 0, 1, []
+        for ch in s:
+            if ch.isdigit():
+                n = 10 * n + int(ch)
+            elif ch in ["+", "-"]:
+                res += sign * n
+                n = 0
+                sign = [-1, 1][ch == "+"]
+            elif ch == "(":
+                stack.append(res)
+                stack.append(sign)
+                res, sign = 0, 1
+            elif ch == ")":
+                res += sign * n
+                res *= stack.pop()
+                res += stack.pop()
+                n = 0
+            else:
+                continue
+        return res + sign * n
