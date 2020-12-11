@@ -1,0 +1,28 @@
+class Solution:
+    def parseBoolExpr(self, expression: str) -> bool:
+        def helper(stack, sign):
+            res = stack.pop()
+            if sign == "!":
+                return not res
+            else:
+                while stack and stack[-1] != "(":
+                    temp = stack.pop()
+                    if sign == "&":
+                        res = res and temp
+                    else:
+                        res = res or temp
+                return res
+        stack, sign = [], []
+        for ch in expression:
+            if ch in "!&|":
+                sign.append(ch)
+            elif ch in "tf":
+                stack.append(ch == "t")
+            elif ch == "(":
+                stack.append(ch)
+            elif ch == ")":
+                res = helper(stack, sign[-1])
+                stack.pop()
+                stack.append(res)
+                sign.pop()
+        return stack[0]
