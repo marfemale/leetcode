@@ -1,0 +1,20 @@
+class Solution:
+    def braceExpansionII(self, expression: str) -> List[str]:
+        res, cur, stack = [], [], []
+        for ch in expression:
+            if ch.isalpha():
+                cur = [s + ch for s in cur or [""]]
+            elif ch == "{":
+                stack.append(res)
+                stack.append(cur)
+                res, cur = [], []
+            elif ch == "}":
+                pre = stack.pop()
+                preres = stack.pop()
+                res += cur
+                cur = [s1 + s2 for s1 in pre or [""] for s2 in res]
+                res = preres
+            else:
+                res += cur
+                cur = []
+        return sorted(set(res + cur))
