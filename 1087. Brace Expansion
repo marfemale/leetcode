@@ -1,0 +1,29 @@
+class Solution:
+    def expand(self, S: str) -> List[str]:
+        def dfs(path, i, lst, res):
+            if i == len(lst):
+                res.append(path)
+                return
+            for ch in lst[i]:
+                path += ch
+                dfs(path, i + 1, lst, res)
+                path = path[:-1]
+
+        lst, brace = [], False
+        for ch in S:
+            if ch == "{":
+                brace = True
+                temp = []
+            elif ch == ",":
+                continue
+            elif ch == "}":
+                brace = False
+                lst.append(temp)
+            else:
+                if brace:
+                    temp.append(ch)
+                else:
+                    lst.append(ch)
+        res = []
+        dfs("", 0, lst, res)
+        return sorted(res)
