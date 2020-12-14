@@ -1,0 +1,21 @@
+class Solution:
+    def countOfAtoms(self, formula: str) -> str:
+        dic, coeff, stack, curele, curnum, i = defaultdict(int), 1, [], "", 0, 0
+        for ch in formula[::-1]:
+            if ch.isdigit():
+                curnum += int(ch) * (10 ** i)
+                i += 1
+            elif ch == ")":
+                stack.append(curnum or 1)
+                coeff *= curnum or 1
+                curnum = i = 0
+            elif ch == "(":
+                coeff //= stack.pop()     
+            elif ch.isupper():
+                curele += ch
+                dic[curele[::-1]] += (curnum or 1) * coeff
+                curele = ""
+                curnum = i = 0
+            else:
+                curele += ch
+        return "".join(k + str(v if v > 1 else "") for k, v in sorted(dic.items()))
