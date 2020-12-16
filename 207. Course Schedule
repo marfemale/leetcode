@@ -1,0 +1,19 @@
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        before = {n : set() for n in range(numCourses)}
+        after = defaultdict(set)
+        for a, b in prerequisites:
+            before[a].add(b)
+            after[b].add(a)
+        res = [k for k in before.keys() if not before[k]]
+        queue = deque(res)
+        while queue:
+            course = queue.popleft()
+            for c in after[course]:
+                before[c].remove(course)
+                if not before[c]:
+                    res.append(c)
+                    queue.append(c)
+        return True if len(res) == numCourses else False
+        #210 Course Schedule II
+        #return res if len(res) == numCourses else [] 
