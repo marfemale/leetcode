@@ -1,0 +1,22 @@
+class Solution:
+    def alienOrder(self, words: List[str]) -> str:
+        order, indegree = defaultdict(set), {letter: 0 for word in words for letter in word}
+        for one, two in zip(words[:-1], words[1:]):
+            for a, b in zip(one, two):
+                if a != b:
+                    if b not in order[a]:
+                        order[a].add(b)
+                        indegree[b] += 1
+                    break
+            else:
+                if len(one) > len(two): return ""
+        queue = deque([k for k in indegree.keys() if not indegree[k]])
+        res = []
+        while queue:
+            letter = queue.popleft()
+            res.append(letter)
+            for nextl in order[letter]:
+                indegree[nextl] -= 1
+                if not indegree[nextl]:
+                    queue.append(nextl)
+        return "".join(res) if len(res) == len(indegree) else ""
