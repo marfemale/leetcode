@@ -1,0 +1,12 @@
+class Solution:
+    def numberOfSubstrings(self, s: str) -> int:
+        start, res, dic = 0, 0, defaultdict(int)
+        for i, ch in enumerate(s):
+            dic[ch] += 1
+            while len(dic) == 3:
+                res += len(s) - i
+                dic[s[start]] -= 1
+                if not dic[s[start]]:
+                    del dic[s[start]]
+                start += 1
+        return res
