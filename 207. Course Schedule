@@ -17,3 +17,24 @@ class Solution:
         return True if len(res) == numCourses else False
         #210 Course Schedule II
         #return res if len(res) == numCourses else [] 
+class Solution(object):
+    def findOrder(self, numCourses, prerequisites):
+        """
+        :type numCourses: int
+        :type prerequisites: List[List[int]]
+        :rtype: List[int]
+        """
+        after, indegree = defaultdict(set), {n : 0 for n in range(numCourses)}
+        for a, b in prerequisites:
+            after[b].add(a)
+            indegree[a] += 1
+        res = [k for k in indegree.keys() if not indegree[k]]
+        queue = deque(res)
+        while queue:
+            course = queue.popleft()
+            for c in after[course]:
+                indegree[c] -= 1
+                if not indegree[c]:
+                    queue.append(c)
+                    res.append(c)
+        return res if len(res) == len(indegree) else []
