@@ -1,0 +1,11 @@
+class Solution:
+    def minOperations(self, nums: List[int], x: int) -> int:
+        total, left, cur, n, res = sum(nums), 0, 0, len(nums), -1
+        for right in range(n):
+            cur += nums[right]
+            while cur > total - x and left < n:
+                cur -= nums[left]
+                left += 1
+            if cur == total - x:
+                res = max(res, right - left + 1)
+        return n - res if res != -1 else -1
