@@ -1,0 +1,14 @@
+class Solution:
+    def numberOfSubarrays(self, nums: List[int], k: int) -> int:
+        j, res, codd, c = 0, 0, 0, 0
+        for i in range(len(nums)):
+            if nums[i] % 2:
+                codd += 1
+                c = 0
+            while codd == k:
+                codd -= nums[j] % 2
+                j += 1
+                c += 1
+            res += c
+        return res
+                
