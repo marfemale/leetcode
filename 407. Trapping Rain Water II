@@ -1,0 +1,23 @@
+class Solution:
+    def trapRainWater(self, heightMap: List[List[int]]) -> int:
+        heap, res, visit = [], 0, set()
+        m, n = len(heightMap), len(heightMap[0])
+        dire = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        for i in range(m):
+            for j in range(n):
+                if i == 0 or i == m - 1 or j == 0 or j == n - 1:
+                    heapq.heappush(heap, (heightMap[i][j], i, j))
+                    visit.add((i, j))
+        while heap:
+            minh, r, c = heapq.heappop(heap)
+            for x, y in dire:
+                nr, nc = r + x, c + y
+                if 0 < nr < m - 1 and 0 < nc < n - 1 and (nr, nc) not in visit:
+                    visit.add((nr, nc))
+                    if heightMap[nr][nc] >= minh:
+                        heapq.heappush(heap, (heightMap[nr][nc], nr, nc))
+                    else:
+                        res += minh - heightMap[nr][nc]
+                        heapq.heappush(heap, (minh, nr, nc))
+        return res
+                        
