@@ -1,0 +1,21 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def maxSumBST(self, root: TreeNode) -> int:
+        def helper(root):
+            if not root:
+                return True, 0, inf, -inf
+            vl, sl, ll, lr = helper(root.left)
+            vr, sr, rl, rr = helper(root.right)
+            if vl and vr and lr < root.val < rl:
+                s = root.val + sl + sr
+                self.res = max(self.res, s)
+                return True, s, min(ll, root.val), max(rr, root.val)
+            return False, 0, inf, -inf
+        self.res = 0
+        helper(root)
+        return self.res
