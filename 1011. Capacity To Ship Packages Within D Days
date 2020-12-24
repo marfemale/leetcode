@@ -1,0 +1,21 @@
+class Solution:
+    def shipWithinDays(self, weights: List[int], D: int) -> int:
+        def helper(n):
+            count = 1
+            load = 0
+            for w in weights:
+                if w + load <= n:
+                    load += w
+                else:
+                    count += 1
+                    load = w
+            return count <= D
+        lo = max(weights)
+        hi = max(weights) * (len(weights) // D + 1)
+        while lo <= hi:
+            mid = (lo + hi) // 2
+            if helper(mid):
+                hi = mid - 1
+            else:
+                lo = mid + 1
+        return lo
