@@ -1,0 +1,13 @@
+class Solution:
+    def findLength(self, A: List[int], B: List[int]) -> int:
+        def helper(length):
+            subA = set(tuple(A[i: i + length]) for i in range(len(A) - length + 1))
+            return any(tuple(B[i:i + length]) in subA for i in range(len(B) - length + 1))
+        left, right = 0, min(len(A), len(B))
+        while left <= right:
+            mid = (left + right) // 2
+            if helper(mid):
+                left = mid + 1
+            else:
+                right = mid - 1
+        return right
