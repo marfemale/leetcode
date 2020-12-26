@@ -1,0 +1,23 @@
+class Solution:
+    def subarraysWithKDistinct(self, A: List[int], K: int) -> int:
+        leftcount, rightcount = Counter(), Counter()
+        left, right, i, j, res = 0, 0, 0, 0, 0
+        for n in A:
+            leftcount[n] += 1
+            if leftcount[n] == 1:
+                left += 1
+            rightcount[n] += 1
+            if rightcount[n] == 1:
+                right += 1
+            while left > K:
+                leftcount[A[i]] -= 1
+                if leftcount[A[i]] == 0:
+                    left -= 1
+                i += 1
+            while right >= K:
+                rightcount[A[j]] -= 1
+                if rightcount[A[j]] == 0:
+                    right -= 1
+                j += 1
+            res += j - i
+        return res
