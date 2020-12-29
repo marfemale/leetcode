@@ -1,0 +1,19 @@
+class Solution:
+    def criticalConnections(self, n: int, connections: List[List[int]]) -> List[List[int]]:
+        def dfs(depth, cur, pre):
+            dep[cur] = depth
+            for nei in graph[cur]:
+                if nei == pre:
+                    continue
+                if not dep[nei]:
+                    dfs(depth + 1, nei, cur)
+                dep[cur] = min(dep[cur], dep[nei])
+                if dep[nei] > depth:
+                    res.append([cur, nei])
+                
+        dep, graph, res = [0] * n, defaultdict(list), []
+        for x, y in connections:
+            graph[x].append(y)
+            graph[y].append(x)
+        dfs(1, 0, -1)
+        return res
