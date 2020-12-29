@@ -1,0 +1,13 @@
+class Solution:
+    def findLatestStep(self, arr: List[int], m: int) -> int:
+        #[0,5,0,3,0,5,0]
+        if len(arr) == m:
+            return m
+        bound = [0] * (len(arr) + 2)
+        res = -1
+        for i, n in enumerate(arr):
+            left, right = bound[n - 1], bound[n + 1]
+            if left == m or right == m:
+                res = i
+            bound[n - left] = bound[n + right] = left + right + 1
+        return res
