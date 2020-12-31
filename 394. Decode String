@@ -1,0 +1,22 @@
+class Solution:
+    def decodeString(self, s: str) -> str:
+        stack, num, alp = [], 0, ""
+        for ch in s:
+            if ch.isdigit():
+                num = num * 10 + int(ch)
+            elif ch.isalpha():
+                alp += ch
+            elif ch == "[":
+                stack.append(alp)
+                stack.append(num)
+                alp, num = "", 0
+            else:
+                while type(stack[-1]) == str:
+                    alp = stack.pop() + alp
+                n = stack.pop()
+                alp = n * alp
+                stack.append(alp)
+                alp = ""
+        stack.append(alp)
+        return "".join(stack)
+        
