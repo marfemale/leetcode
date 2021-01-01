@@ -1,0 +1,18 @@
+class Solution:
+    def longestSubarray(self, nums: List[int], limit: int) -> int:
+        res, i, dmax, dmin = 0, 0, deque(), deque()
+        for j, num in enumerate(nums):
+            while dmax and nums[dmax[-1]] < num:
+                dmax.pop()
+            while dmin and nums[dmin[-1]] > num:
+                dmin.pop()
+            dmax.append(j)
+            dmin.append(j)
+            while dmax and dmin and nums[dmax[0]] - nums[dmin[0]] > limit:
+                i += 1
+                if dmax[0] < i:
+                    dmax.popleft()
+                if dmin[0] < i:
+                    dmin.popleft()
+            res = max(res, j - i + 1)
+        return res
