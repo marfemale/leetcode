@@ -1,0 +1,22 @@
+class Solution:
+    def sequenceReconstruction(self, org: List[int], seqs: List[List[int]]) -> bool:
+        graph = defaultdict(list)
+        indegree = {n: 0 for seq in seqs for n in seq}
+        for seq in seqs:
+            for p, c in zip(seq, seq[1:]):
+                graph[p].append(c)
+                indegree[c] += 1
+        q = deque([k for k in indegree.keys() if not indegree[k]])
+        res = []
+        while q:
+            if len(q) > 1:
+                return False
+            node = q.popleft()
+            res.append(node)
+            for chd in graph[node]:
+                indegree[chd] -= 1
+                if not indegree[chd]:
+                    q.append(chd)
+        return res == org and sum(indegree.values()) == 0
+                
+                
