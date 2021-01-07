@@ -1,0 +1,16 @@
+class Solution:
+    def checkIfPrerequisite(self, n: int, prerequisites: List[List[int]], queries: List[List[int]]) -> List[bool]:
+        pre, graph, indegree = defaultdict(set), defaultdict(set), {x: 0 for x in range(n)}
+        for b, a in prerequisites:
+            indegree[a] += 1
+            graph[b].add(a)
+            pre[a].add(b)
+        q = deque([k for k in range(n) if not indegree[k]])
+        while q:
+            c = q.popleft()
+            for nc in graph[c]:
+                pre[nc] |= pre[c]
+                indegree[nc] -= 1
+                if not indegree[nc]:
+                    q.append(nc)
+        return [b in pre[a] for b, a in queries]
