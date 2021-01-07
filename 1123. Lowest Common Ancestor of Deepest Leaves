@@ -1,0 +1,29 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def lcaDeepestLeaves(self, root: TreeNode) -> TreeNode:
+        q = [root]
+        dic = {root: None}
+        while q:
+            tmp = q[:]
+            for _ in range(len(q)):
+                node = q.pop(0)
+                if node.left:
+                    dic[node.left] = node
+                    q.append(node.left)
+                if node.right:
+                    dic[node.right] = node
+                    q.append(node.right)
+        node = tmp[0]
+        s = set([node])
+        while dic[node]:
+            node = dic[node]
+            s.add(node)
+        node = tmp[-1]
+        while node not in s:
+            node = dic[node]
+        return node
