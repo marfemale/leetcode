@@ -1,0 +1,17 @@
+class Solution:
+    def visiblePoints(self, points: List[List[int]], angle: int, location: List[int]) -> int:
+        x0, y0 = location
+        degree, i, res, extra = [], 0, 0, 0
+        for x, y in points:
+            if x == x0 and y == y0:
+                extra += 1
+            else:
+                rad = math.atan2(x - x0, y - y0)
+                degree.append(math.degrees(rad))
+        degree = degree + [x + 360 for x in degree]
+        degree.sort()
+        for j in range(len(degree)):
+            while degree[j] - degree[i] > angle:
+                i += 1
+            res = max(res, j - i + 1)
+        return res + extra
