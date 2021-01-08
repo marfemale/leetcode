@@ -1,0 +1,41 @@
+class Solution:
+    def sortItems(self, n: int, m: int, group: List[int], beforeItems: List[List[int]]) -> List[int]:
+        def seq(graph, indegree):
+            res = []
+            q = deque([x for x in indegree.keys() if not indegree[x]])
+            while q:
+                node = q.popleft()
+                res.append(node)
+                for nextnode in graph[node]:
+                    indegree[nextnode] -= 1
+                    if not indegree[nextnode]:
+                        q.append(nextnode)
+            return res if len(res) == len(indegree) else []
+        
+        for i in range(n):
+            if group[i] == -1:
+                group[i] = m
+                m += 1
+        itemgraph = defaultdict(set)
+        itemidg = {x : 0 for x in range(n)}
+        gpgraph = defaultdict(set)
+        gpidg = {x : 0 for x in range(m)}
+        for i in range(n):
+            for num in beforeItems[i]:
+                if i not in itemgraph[num]:
+                    itemgraph[num].add(i)
+                    itemidg[i] += 1
+                if group[i] != group[num] and group[i] not in gpgraph[group[num]]:
+                    gpgraph[group[num]].add(group[i])
+                    gpidg[group[i]] += 1
+        itemseq = seq(itemgraph, itemidg)
+        gpseq = seq(gpgraph, gpidg)
+        if not itemseq or not gpseq:
+            return []
+        item_inorder = defaultdict(list)
+        for item in itemseq:
+            item_inorder[group[item]].append(item)
+        res = []
+        for gp in gpseq:
+            res += item_inorder[gp]
+        return res
