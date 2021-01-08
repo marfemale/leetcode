@@ -1,0 +1,21 @@
+class Solution:
+    def boxDelivering(self, boxes: List[List[int]], portsCount: int, maxBoxes: int, maxWeight: int) -> int:
+        #dp[i] represent the trip that tranfer i boxes
+        #dp[right] = dp[left] + trip
+        #     [[1,2],[3,3],[3,1],[3,1],[2,4]]  maxBoxes = 3, maxWeight = 6
+        #                        left   right           box = 3, weight = 6
+        # 0          + 1    + 0   + 0  + 1      trip = 1
+        n = len(boxes)
+        dp = [0] * (n + 1)
+        left, weight, trip = 0, 0, 1
+        for right in range(n):
+            if right == 0 or boxes[right][0] != boxes[right - 1][0]:
+                trip += 1
+            weight += boxes[right][1]
+            while weight > maxWeight or right - left + 1 > maxBoxes or (left < right and dp[left] == dp[left + 1]):
+                weight -= boxes[left][1]
+                left += 1
+                if boxes[left][0] != boxes[left - 1][0]:
+                    trip -= 1
+            dp[right + 1] = dp[left] + trip
+        return dp[n]
