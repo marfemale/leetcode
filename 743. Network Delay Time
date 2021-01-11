@@ -1,0 +1,14 @@
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], N: int, K: int) -> int:
+        graph = defaultdict(list)
+        for u, v, w in times:
+            graph[u].append((v, w))
+        q = deque([(0, K)])
+        dic = {}
+        while q:
+            d, node = q.popleft()
+            if node not in dic or dic[node] > d:
+                dic[node] = d
+                for nei, d1 in graph[node]:
+                    q.append((d + d1, nei))
+        return max(dic.values()) if len(dic) == N else -1
