@@ -1,0 +1,19 @@
+class Solution:
+    def minimumJumps(self, forbidden: List[int], a: int, b: int, x: int) -> int:
+        maxval = max([x] + forbidden) + a * 2 + b
+        jump = [0] + [inf] * maxval
+        for i in forbidden:
+            jump[i] = -1
+        q = deque([0])
+        while q:
+            pos = q.popleft()
+            if pos + a <= maxval and jump[pos + a] > jump[pos] + 1:
+                q.append(pos + a)
+                jump[pos + a] = jump[pos] + 1
+            if pos - b > 0 and jump[pos - b] > jump[pos] + 1:
+                jump[pos - b] = jump[pos] + 1
+                if pos - b + a <= maxval and jump[pos - b + a] > jump[pos] + 2:
+                    jump[pos -b + a] = jump[pos] + 2
+                    q.append(pos - b + a)
+        return jump[x] if jump[x] < inf else -1
+        
