@@ -1,0 +1,22 @@
+class Solution:
+    def minWindow(self, S: str, T: str) -> str:
+        #"a  b  c  d  e  b  d  d  e", T = "bde"
+        #S[left:right]
+        #[N  1  N  N  N  5  N  N  N] LAST = 1, pre
+        #[N  N  N  1  N  N  5  5  N] 
+        #[N  N  N  N  1  N  N  N  5] 
+        pre = [i if S[i] == T[0] else -1 for i in range(len(S))]
+        for i in range(1, len(T)):
+            cur = [-1] * len(S)
+            last = -1
+            for j in range(len(S)):
+                if last != -1 and S[j] == T[i]:
+                    cur[j] = last
+                if pre[j] != -1:
+                    last = pre[j]
+            pre = cur
+        res = [0, len(S)]
+        for i in range(len(pre)):
+            if pre[i] != -1 and i - pre[i] < res[1] - res[0]:
+                res = [pre[i], i]
+        return S[res[0]: res[1] + 1] if res[1] != len(S) else ""
