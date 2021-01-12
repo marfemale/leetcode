@@ -1,0 +1,27 @@
+class DSU:
+    def __init__(self, n):
+        self.root = [i for i in range(n)]#[0,1,2,3,4]
+        
+    def find(self, x):
+        if x != self.root[x]:
+            self.root[x] = self.find(self.root[x])
+        return self.root[x]
+    
+    def union(self, x, y):
+        self.root[self.find(x)] = self.find(y)
+        
+class Solution:
+    def minimumHammingDistance(self, source: List[int], target: List[int], allowedSwaps: List[List[int]]) -> int:
+        res = n = len(source)
+        uf = DSU(n)
+        for x, y in allowedSwaps:
+            uf.union(x, y)
+        d1,d2 = defaultdict(list), defaultdict(list)
+        for i in range(n):
+            d1[uf.find(i)].append(source[i])
+            d2[uf.find(i)].append(target[i])
+        for k in d1.keys():
+            c1 = Counter(d1[k])
+            c2 = Counter(d2[k])
+            res -= sum((c1 & c2).values())
+        return res
