@@ -1,0 +1,15 @@
+class Solution:
+    def minKBitFlips(self, A: List[int], K: int) -> int:
+        n = len(A)
+        hint = [0] * n
+        res, flip = 0, 0
+        for i in range(len(A)):
+            flip += hint[i]
+            if flip % 2 == A[i]:
+                if i + K > n:
+                    return -1
+                res += 1
+                flip += 1
+                if i +K < n:
+                    hint[i + K] = -1
+        return res
