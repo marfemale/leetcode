@@ -1,0 +1,73 @@
+#heap
+class Solution:
+    def swimInWater(self, grid: List[List[int]]) -> int:
+        n, res = len(grid), 0
+        q, visit = [(grid[0][0], 0, 0)], {(0, 0)}
+        while q:
+            h, r, c = heapq.heappop(q)
+            res = max(res, h)
+            if r == c == n - 1:
+                return res
+            for nr, nc in [(r -1, c), (r + 1, c), (r, c + 1), (r, c -1)]:
+                if 0 <= nr < n and 0 <= nc < n and (nr, nc) not in visit:
+                    visit.add((nr, nc))
+                    heapq.heappush(q, (grid[nr][nc], nr, nc))
+                    
+  #union find                  
+  class DSU:
+    def __init__(self, n):
+        self.root = [i for i in range(n)]
+        
+    def find(self, x):
+        if x != self.root[x]:
+            self.root[x] = self.find(self.root[x])
+        return self.root[x]
+    
+    def union(self, x, y):
+        self.root[self.find(x)] = self.find(y)
+        
+class Solution:
+    def swimInWater(self, grid: List[List[int]]) -> int:
+        n = len(grid)
+        uf = DSU(n * n)
+        wh = []
+        for i in range(n):
+            for j in range(n):
+                wh.append((grid[i][j], i, j))
+        wh.sort()
+        visit = set()
+        for h, r, c in wh:
+            p = r * n + c
+            visit.add(p)
+            for nr, nc in [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]:
+                if 0 <= nr < n and 0 <= nc < n:
+                    np = nr * n + nc
+                    if np in visit and uf.find(np) != uf.find(p):
+                        uf.union(np, p)
+            if uf.find(0) == uf.find(n * n - 1):
+                return h
+  #binary search + bfs
+  class Solution:
+    def swimInWater(self, grid: List[List[int]]) -> int:
+        def dfs(t):
+            q = deque([(0, 0)])
+            visit = set([(0, 0)])
+            while q:
+                r, c = q.popleft()
+                if r == n - 1 and c == n - 1:
+                    return True
+                for nr, nc in [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]:
+                    if 0 <= nr < n and 0 <= nc < n and grid[nr][nc] <= t and (nr, nc) not in visit:
+                        visit.add((nr, nc))
+                        q.append((nr, nc))
+            return False
+        
+        n = len(grid)
+        left, right = max(grid[0][0], grid[n - 1][n - 1]), max(max(grid))
+        while left <= right:
+            mid = left + (right - left) // 2
+            if dfs(mid):
+                right = mid - 1
+            else:
+                left = mid + 1
+        return left 
