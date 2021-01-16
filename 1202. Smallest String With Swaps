@@ -1,0 +1,37 @@
+class DSU:
+    def __init__(self, n):
+        self.root = [i for i in range(n)]
+        # self.rank = [0] * n
+        
+    def find(self, x):
+        if x != self.root[x]:
+            self.root[x] = self.find(self.root[x])
+        return self.root[x]
+    
+    def union(self, x, y):
+        # xr, yr = self.find(x), self.find(y)
+        # if xr == yr:
+        #     return
+        # elif self.rank[xr] > self.rank[yr]:
+        #     self.root[yr] = self.root[xr]
+        # elif self.rank[xr] < self.rank[yr]:
+        #     self.root[xr] = self.root[yr]
+        # else:
+        #     self.root[yr] = self.root[xr]
+        #     self.rank[xr] += 1
+        self.root[self.find(x)] = self.find(y)
+            
+class Solution:
+    def smallestStringWithSwaps(self, s: str, pairs: List[List[int]]) -> str:
+        uf = DSU(len(s))
+        for x, y in pairs:
+            uf.union(x, y)
+        dic, group = {}, defaultdict(list)
+        for i in range(len(s)):
+            j = uf.find(i)
+            heapq.heappush(group[j], s[i])
+            dic[i] = j
+        res = ""
+        for i in range(len(s)):
+            res += heapq.heappop(group[dic[i]])
+        return res
