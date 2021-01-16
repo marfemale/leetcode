@@ -1,0 +1,37 @@
+class Solution:
+    def shortestBridge(self, A: List[List[int]]) -> int:
+        #1 1 1 1 1 1 1 1
+        #1 0 1 0 1 0 0 1
+        #1 0 1 0 1 0 0 1
+        #1 0 0 0 1 0 0 1
+        #1 1 1 1 1 0 0 1
+        
+        def dfs(r, c):
+            A[r][c] = -1
+            island.append((r, c))
+            for nr, nc in [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]:
+                if 0 <= nr < m and 0 <= nc < n and A[nr][nc] == 1:
+                    dfs(nr, nc)
+                    
+        island = []
+        m, n = len(A), len(A[0])
+        for i in range(m):
+            for j in range(n):
+                if A[i][j] == 1:
+                    dfs(i, j)
+                    break
+            if island:
+                break
+        flip = 0
+        while island:
+            bridge = []
+            for r, c in island:
+                for nr, nc in [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]:
+                    if 0 <= nr < m and 0 <= nc < n:
+                        if A[nr][nc] == 1:
+                            return flip
+                        elif A[nr][nc] == 0:
+                            bridge.append((nr, nc))
+                            A[nr][nc] = -1
+            flip += 1
+            island = bridge
