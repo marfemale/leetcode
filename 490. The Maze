@@ -1,0 +1,21 @@
+class Solution:
+    def hasPath(self, maze: List[List[int]], start: List[int], destination: List[int]) -> bool:
+        m, n = len(maze), len(maze[0])
+        dire = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+        q = deque([start])
+        visit = set(tuple(start))
+        while q:
+            r, c = q.popleft()
+            for dx, dy in dire:
+                nr, nc = r + dx, c + dy
+                while 0 <= nr < m and 0 <= nc < n and not maze[nr][nc]:
+                    nr += dx
+                    nc += dy
+                nr -= dx
+                nc -= dy
+                if (nr, nc) not in visit:
+                    if [nr, nc]== destination:
+                        return True
+                    visit.add((nr, nc))
+                    q.append([nr, nc])
+        return False
