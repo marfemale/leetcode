@@ -1,0 +1,24 @@
+class Solution:
+    def minimumTimeRequired(self, jobs: List[int], k: int) -> int:
+        def dfs(t, arr, i):
+            if i == len(jobs):
+                return True
+            for j in range(len(arr)):
+                arr[j] += jobs[i]
+                if arr[j] <= t and dfs(t, arr, i + 1):
+                    return True
+                arr[j] -= jobs[i]
+                if arr[j] == 0:
+                    break
+            return False
+        #[8,7]
+        jobs.sort(reverse = True)
+        left, right = sum(jobs) // k, sum(jobs)
+        while left <= right:
+            mid = left + (right - left) // 2
+            arr = [0] * k
+            if dfs(mid, arr, 0):
+                right = mid - 1
+            else:
+                left = mid + 1
+        return left
