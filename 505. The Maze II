@@ -1,0 +1,19 @@
+class Solution:
+    def shortestDistance(self, maze: List[List[int]], start: List[int], destination: List[int]) -> int:
+        m, n = len(maze), len(maze[0])
+        q, visit = [(0, start[0], start[1])], {tuple(start): 0}
+        while q:
+            dis, r, c = heapq.heappop(q)
+            if [r, c] == destination:
+                return dis
+            for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                step, nr, nc = 0, r, c
+                while 0 <= nr < m and 0 <= nc < n and not maze[nr][nc]:
+                    nr += dx
+                    nc += dy
+                    step += 1
+                nr, nc, step = nr - dx, nc - dy, step - 1
+                if (nr, nc) not in visit or visit[(nr, nc)] > dis + step:
+                    visit[(nr, nc)] = dis + step
+                    heapq.heappush(q, (dis + step, nr, nc))
+        return -1
