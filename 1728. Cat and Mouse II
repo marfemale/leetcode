@@ -27,3 +27,45 @@ class Solution:
             return not cursta
         
         return minimax(mouse, cat, 0)
+
+#original, more readable:
+class Solution:
+    def canMouseWin(self, grid: List[str], catJump: int, mouseJump: int) -> bool:
+        m, n, valid = len(grid), len(grid[0]), 0
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] != "#": valid += 1
+                if grid[i][j] == "F": food = (i, j)
+                if grid[i][j] == "C": cat = (i, j)
+                if grid[i][j] == "M": mouse = (i, j)
+        
+        @lru_cache(None)           
+        def minimax(mouse, cat, turn):
+            if mouse == cat or cat == food or turn > valid * 2:
+                return False
+            if mouse == food:
+                return True
+            if turn % 2 == 0:
+                for nmouse in nextpos(mouse, turn):
+                    if minimax(nmouse, cat, turn + 1) == True:
+                        return True
+                return False
+            else:
+                for ncat in nextpos(cat, turn):
+                    if minimax(mouse, ncat, turn + 1) == False:
+                        return False
+                return True
+        
+        def nextpos(pos, turn):
+            res = []
+            jump = catJump if turn % 2 else mouseJump
+            for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                for step in range(jump + 1):
+                    nr, nc = pos[0] + step * dx, pos[1] + step * dy
+                    if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] != "#":
+                        res.append((nr, nc))
+                    else:
+                        break
+            return res
+        
+        return minimax(mouse, cat, 0)
