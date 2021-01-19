@@ -1,0 +1,29 @@
+class Solution:
+    def canMouseWin(self, grid: List[str], catJump: int, mouseJump: int) -> bool:
+        m, n, valid = len(grid), len(grid[0]), 0
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] != "#": valid += 1
+                if grid[i][j] == "F": food = (i, j)
+                elif grid[i][j] == "M": mouse = (i, j)
+                elif grid[i][j] == "C": cat = (i, j)
+        
+        @lru_cache(None)           
+        def minimax(mouse, cat, turn):
+            if cat == food or cat == mouse or turn > valid * 2:
+                return False
+            if mouse == food:
+                return True
+            curpos, curjump, cursta = (cat, catJump, False) if turn % 2 else (mouse, mouseJump, True)
+            for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                for step in range(curjump + 1):
+                    nr, nc = curpos[0] + step * dx, curpos[1] + step * dy
+                    if not (0 <= nr < m and 0 <= nc < n) or grid[nr][nc] == '#':
+                        break
+                    if turn % 2 and not minimax(mouse, (nr, nc), turn + 1):
+                        return cursta
+                    elif not turn % 2 and minimax((nr, nc), cat, turn + 1):
+                        return cursta
+            return not cursta
+        
+        return minimax(mouse, cat, 0)
