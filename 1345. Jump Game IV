@@ -1,0 +1,22 @@
+class Solution:
+    def minJumps(self, arr: List[int]) -> int:
+        same = defaultdict(list)
+        for i, num in enumerate(arr):
+            same[num].append(i)
+        q, visit = deque([(0, 0)]), set([0])
+        while q:
+            step, index = q.popleft()
+            if index == len(arr) - 1:
+                return step
+            if index > 0 and index - 1 not in visit:
+                q.append((step + 1, index - 1))
+                visit.add(index - 1)
+            if index < len(arr) - 1 and index + 1 not in visit:
+                q.append((step + 1, index  + 1))
+                visit.add(index + 1)
+            for i in same[arr[index]]:
+                if i != index and i not in visit:
+                    q.append((step + 1, i))
+                    visit.add(i)
+            same[arr[index]] = []
+                    
