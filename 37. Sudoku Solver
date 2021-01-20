@@ -1,0 +1,36 @@
+class Solution:
+    def solveSudoku(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        row, col, box, need = defaultdict(set), defaultdict(set), defaultdict(set), []
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] != ".":
+                    row[i].add(board[i][j])
+                    col[j].add(board[i][j])
+                    box[(i // 3, j // 3)].add(board[i][j])
+                else:
+                    need.append((i , j))
+                    
+        def dfs(need):
+            if not need:
+                return True
+            r, c = need[-1]
+            for num in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                if num not in row[r] and num not in col[c] and num not in box[(r // 3, c // 3)]:
+                    board[r][c] = num
+                    row[r].add(num)
+                    col[c].add(num)
+                    box[(r // 3, c // 3)].add(num)
+                    need.pop()
+                    if dfs(need):
+                        return True
+                    board[r][c] = "."
+                    row[r].remove(num)
+                    col[c].remove(num)
+                    box[(r // 3, c // 3)].remove(num)
+                    need.append((r, c))
+            return False
+        
+        dfs(need)
