@@ -1,0 +1,32 @@
+class Solution:
+    def cutOffTree(self, forest: List[List[int]]) -> int:
+        m, n = len(forest), len(forest[0])
+        heap, step = [], 0
+        for i in range(m):
+            for j in range(n):
+                if forest[i][j] > 1:
+                    heapq.heappush(heap, (forest[i][j], i, j))
+        def dis(i, j, dr, dc):
+            q, visit, res = deque([(i, j)]), set([(i, j)]), 0
+            while q:
+                for _ in range(len(q)):
+                    r, c = q.popleft()
+                    if r == dr and c == dc:
+                        return res
+                    for nr, nc in [(r, c + 1), (r, c - 1), (r + 1, c), (r - 1, c)]:
+                        if 0 <= nr < m and 0 <= nc < n and (nr, nc) not in visit and forest[nr][nc] != 0:
+                            q.append((nr, nc))
+                            visit.add((nr, nc))
+                res += 1
+            return -1
+        
+        i, j = 0, 0
+        while heap:
+            _, r, c = heapq.heappop(heap)
+            res = dis(i, j, r, c)
+            if res == -1:
+                return -1
+            else:
+                step += res
+            i, j = r, c
+        return step
