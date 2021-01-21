@@ -1,0 +1,25 @@
+class Solution:
+    def minFlips(self, mat: List[List[int]]) -> int:
+        def flip(matrix, r, c):
+            res = copy.deepcopy(matrix)
+            res[r][c] ^= 1
+            for nr, nc in [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]:
+                if 0 <= nr < m and 0 <= nc < n:
+                    res[nr][nc] ^= 1
+            return res
+        m, n = len(mat), len(mat[0])
+        q, visit, step = deque([mat]), set([tuple(map(tuple, mat))]), 0
+        while q:
+            for _ in range(len(q)):
+                matrix = q.popleft()
+                if sum(map(sum, matrix)) == 0:
+                    return step
+                for i in range(m):
+                    for j in range(n):
+                        nmat = flip(matrix, i, j)
+                        nnode = tuple(map(tuple, nmat))
+                        if nnode not in visit:
+                            q.append(nmat)
+                            visit.add(nnode)
+            step += 1
+        return -1
