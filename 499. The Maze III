@@ -1,0 +1,28 @@
+class Solution:
+    def findShortestWay(self, maze: List[List[int]], ball: List[int], hole: List[int]) -> str:
+        m, n = len(maze), len(maze[0])
+        q = [(0, ball[0], ball[1], "")]
+        res, visit = [(inf, "")], set()
+        while q:
+            dis, r, c, path = heapq.heappop(q)
+            if dis > res[0][0]:
+                break
+            visit.add((r, c))
+            for dx, dy, dire in [(1, 0, "d"), (-1, 0, "u"), (0, 1, "r"), (0, -1, "l")]:
+                nr, nc, d = r, c, dis
+                while 0 <= nr + dx < m and 0 <= nc + dy < n and maze[nr + dx][nc + dy] != 1:
+                    nr += dx
+                    nc += dy
+                    d += 1
+                    if [nr, nc] == hole:
+                        if d < res[0][0]:
+                            res = [(d, path + dire)]
+                        elif d == res[0][0]:
+                            res.append((d, path + dire))
+                if (nr, nc) not in visit:
+                    heapq.heappush(q, (d, nr, nc, path + dire))
+        if res[0][0] == inf:
+            return "impossible"
+        else:
+            return sorted(res, key = lambda x: x[1])[0][1]
+                            
