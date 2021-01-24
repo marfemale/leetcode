@@ -1,0 +1,28 @@
+class Solution:
+    def shortestPathAllKeys(self, grid: List[str]) -> int:
+        m, n = len(grid), len(grid[0])
+        k = 0
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == "@":
+                    start = (i, j)
+                if grid[i][j].islower():
+                    k += 1
+        q, visit = deque([(0, start[0], start[1], 0)]), set([(start[0], start[1], 0)])
+        while q:
+            step, r, c, key = q.popleft()
+            if key == 2**k - 1:
+                return step
+            for (nr, nc) in [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]:
+                nkey =  key
+                if 0 <= nr < m and 0 <= nc < n and grid[nr][nc] != "#":
+                    ch = grid[nr][nc]
+                    if ch.isupper() and (1 << ord(ch.lower()) - ord("a")) & nkey == 0:
+                        continue
+                    if ch.islower() and (1 << (ord(ch) - ord("a"))) & nkey == 0:
+                        nkey |= 1 << (ord(ch) - ord("a"))
+                    if (nr, nc, nkey) not in visit:
+                        q.append((step + 1, nr, nc, nkey))
+                        visit.add((nr, nc, nkey))
+        return -1
+        
