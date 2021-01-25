@@ -1,0 +1,18 @@
+class Solution:
+    def minCost(self, grid: List[List[int]]) -> int:
+        m, n, k = len(grid), len(grid[0]), 0
+        dire = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        dp = [[inf] * n for _ in range(m)]
+        bfs = []
+        def dfs(r, c):
+            if r < 0 or r >= m or c < 0 or c >= n or dp[r][c] != inf:
+                return
+            dp[r][c] = k
+            bfs.append((r, c))
+            dfs(r + dire[grid[r][c] - 1][0], c + dire[grid[r][c] - 1][1])
+        dfs(0, 0)
+        while bfs:
+            k += 1
+            bfs, bfs2= [], bfs
+            [dfs(r + x, c + y) for r, c in bfs2 for x, y in dire]
+        return dp[-1][-1]
