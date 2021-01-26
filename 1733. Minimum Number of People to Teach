@@ -1,0 +1,27 @@
+class Solution:
+    def minimumTeachings(self, n: int, languages: List[List[int]], friendships: List[List[int]]) -> int:
+        # lan = [set(l) for l in languages]
+        # res = inf
+        # for i in range(n):
+        #     teach = set()
+        #     for x, y in friendships:
+        #         if lan[x - 1] & lan[y - 1]:
+        #             continue
+        #         if i not in lan[x - 1]:
+        #             teach.add(x)
+        #         if i not in lan[y - 1]:
+        #             teach.add(y)
+        #     res = min(res, len(teach))
+        # return res
+        lan = [set(l) for l in languages]
+        notcom = set()
+        for x, y in friendships:
+            if lan[x - 1] & lan[y - 1]:
+                continue
+            notcom.add(x)
+            notcom.add(y)
+        c = Counter()
+        for i in notcom:
+            for l in languages[i - 1]:
+                c[l] += 1
+        return 0 if not notcom else len(notcom) - max(c.values())
