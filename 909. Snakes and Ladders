@@ -1,0 +1,27 @@
+class Solution:
+    def snakesAndLadders(self, board: List[List[int]]) -> int:
+        n = len(board)
+        dic = {}
+        for i in range(n):
+            for j in range(n):
+                if board[i][j] != -1:
+                    if (n - i) % 2:
+                        s = n * (n - i - 1) + j + 1
+                        dic[s] = board[i][j]
+                    else:
+                        s = n * (n - i) - j
+                        dic[s] = board[i][j]
+        q, visit = deque([(1, 0)]), set([1])
+        while q:
+            curnum, step = q.popleft()
+            for nextnum in range(curnum + 1, curnum + 7):
+                if nextnum in dic:
+                    visit.add(nextnum)
+                    nextnum = dic[nextnum]
+                if nextnum == n * n:
+                    return step + 1
+                if nextnum not in visit:
+                    visit.add(nextnum)
+                    q.append((nextnum, step + 1))
+        return -1
+                    
