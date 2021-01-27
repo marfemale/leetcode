@@ -1,0 +1,18 @@
+class Solution:
+    def getSkyline(self, buildings: List[List[int]]) -> List[List[int]]:
+        #points = [2,3,5,7,9,12,15,19,20,24]
+        #[(-12,12),(-10, 9), ]
+        #[[0,0], [2,10]]
+        points = set([b[0] for b in buildings] + [b[1] for b in buildings])
+        q, i, res = [], 0, [[0,0]]
+        points = sorted(list(points))
+        for p in points:
+            while i < len(buildings) and buildings[i][0] == p:
+                heapq.heappush(q, (-buildings[i][2], buildings[i][1]))
+                i += 1
+            while q and q[0][1] <= p:
+                heapq.heappop(q)
+            h = -q[0][0] if q else 0
+            if h != res[-1][1]:
+                res.append([p, h])
+        return res[1:]
