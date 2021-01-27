@@ -1,0 +1,17 @@
+class Solution:
+    def shortestPathLength(self, graph: List[List[int]]) -> int:
+        n = len(graph)
+        queue = deque([(1 << x, x) for x in range(n)])
+        dic = defaultdict(lambda: inf)
+        for x in range(n):
+            dic[(1 << x, x)] = 0
+        while queue:
+            path, node = queue.popleft()
+            d = dic[(path, node)]
+            if path == 2 ** n - 1:
+                return d
+            for child in graph[node]:
+                newpath = path | 1 << child
+                if d + 1 < dic[(newpath, child)]:
+                    dic[(newpath, child)] = d + 1
+                    queue.append((newpath, child))
