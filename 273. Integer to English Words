@@ -1,0 +1,41 @@
+class Solution:
+    def numberToWords(self, num: int) -> str:
+        # range[0, 2^31 - 1]2,147,483,647
+        if not num:
+            return "Zero"
+        dic = {1: "One", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7:"Seven", 8:"Eight", 9:"Nine", 10: "Ten", 11: "Eleven", 12: "Twelve", 13: "Thirteen", 14: "Fourteen", 15: "Fifteen", 16: "Sixteen", 17: "Seventeen", 18: "Eighteen", 19: "Nineteen"}
+        ten = {2: 'Twenty', 3: 'Thirty', 4: 'Forty', 5: 'Fifty', 6: 'Sixty', 7: 'Seventy', 8: 'Eighty', 9: 'Ninety'}
+        def two(n):
+            if n < 20:
+                return dic[n]
+            else:
+                tener = n // 10
+                rest = n - tener * 10
+                return ten[tener] + " " + dic[rest] if rest else ten[tener]
+            
+        def three(n):
+            hun = n // 100
+            rest = n - hun * 100
+            if hun and rest:
+                return dic[hun] + " Hundred " + two(rest)
+            elif not hun and rest:
+                return two(rest)
+            else:
+                return dic[hun] + " Hundred"
+        billion = num // 10**9
+        million = (num - billion * 10 ** 9) // 10**6
+        thousand = (num - billion * 10 ** 9 - million * 10 **6) // 1000
+        rest = num - billion * 10 ** 9 - million * 10 **6 - thousand * 1000
+        res = ""
+        if billion:
+            res += three(billion) + " Billion"
+        if million:
+            res += " " if res else ""
+            res += three(million) + " Million"
+        if thousand:
+            res += " " if res else ""
+            res += three(thousand) + " Thousand"
+        if rest:
+            res += " " if res else ""
+            res += three(rest)
+        return res
