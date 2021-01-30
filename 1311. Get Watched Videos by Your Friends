@@ -1,0 +1,17 @@
+class Solution:
+    def watchedVideosByFriends(self, watchedVideos: List[List[str]], friends: List[List[int]], id: int, level: int) -> List[str]:
+        q, visit = deque([id]), set([id])
+        while level > 0:
+            for _ in range(len(q)):
+                fid = q.popleft()
+                for frd in friends[fid]:
+                    if frd not in visit:
+                        visit.add(frd)
+                        q.append(frd)
+            level -= 1
+        c = Counter()
+        for frd in q:
+            for ved in watchedVideos[frd]:
+                c[ved] += 1
+        res = sorted(c.keys(), key = lambda x: (c[x], x))
+        return res
