@@ -1,0 +1,20 @@
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        # res = [[]]
+        # for num in nums:
+        #     res += [[num] + sub for sub in res]
+        # return res
+        def dfs(first = 0, cur = []):
+            if len(cur) == k:
+                res.append(cur[:])
+                return
+            for i in range(first, n):
+                cur.append(nums[i])
+                dfs(i + 1, cur)
+                cur.pop()
+        n = len(nums)
+        res = []
+        for k in range(n + 1):
+            dfs()
+        return res
+            
