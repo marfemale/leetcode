@@ -1,0 +1,17 @@
+class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        def dfs(arr):
+            if len(arr) == len(nums):
+                res.append(arr[:])
+                return
+            for num in ct:
+                if ct[num] > 0:
+                    ct[num] -= 1
+                    arr.append(num)
+                    dfs(arr)
+                    ct[num] += 1
+                    arr.pop()
+        res = []
+        ct = Counter(nums)
+        dfs([])
+        return res
