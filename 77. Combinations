@@ -1,0 +1,11 @@
+class Solution:
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        def dfs(path, i):
+            if len(path) == k:
+                res.append(path)
+                return
+            for num in range(i, n + 1):
+                dfs(path + [num], num + 1)
+        res = []
+        dfs([], 1)
+        return res
