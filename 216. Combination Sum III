@@ -1,0 +1,15 @@
+class Solution:
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        def dfs(path, i, target, k):
+            if k == 0:
+                if target == 0:
+                    res.append(path)
+                return
+            elif target < 0:
+                return
+            else:
+                for num in range(i, 10):
+                    dfs(path + [num], num + 1, target - num, k - 1)
+        res = []
+        dfs([], 1, n, k)
+        return res
