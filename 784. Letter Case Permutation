@@ -1,0 +1,16 @@
+class Solution:
+    def letterCasePermutation(self, S: str) -> List[str]:
+        def dfs(string, index):
+            res.append("".join(string))
+            for i in range(index, len(string)):
+                if string[i].islower():
+                    string[i] = string[i].upper()
+                    dfs(string, i + 1)
+                    string[i] = string[i].lower()
+                elif string[i].isupper():
+                    string[i] = string[i].lower()
+                    dfs(string, i + 1)
+                    string[i] = string[i].upper()
+        res = []
+        dfs(list(S), 0)
+        return res
