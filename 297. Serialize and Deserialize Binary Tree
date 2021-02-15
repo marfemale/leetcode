@@ -1,0 +1,100 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Codec:
+
+    def serialize(self, root):
+        """Encodes a tree to a single string.
+        
+        :type root: TreeNode
+        :rtype: str
+        """
+        vals = []
+        def preorder(root):
+            if not root:
+                vals.append("null")
+            else:
+                vals.append(str(root.val))
+                preorder(root.left)
+                preorder(root.right)
+        preorder(root)
+        print(vals)
+        return ",".join(vals)
+
+    def deserialize(self, data):
+        """Decodes your encoded data to tree.
+        
+        :type data: str
+        :rtype: TreeNode
+        """
+        if not data:
+            return None
+        vals = deque(data.split(","))
+        def build(vals):
+            if vals:
+                val = vals.popleft()
+                if val == "null":
+                    return None
+                else:
+                    root = TreeNode(int(val))
+                    root.left = build(vals)
+                    root.right = build(vals)
+                return root
+        return build(vals)
+        
+        
+        #428. Serialize and Deserialize N-ary Tree
+        
+        """
+# Definition for a Node.
+class Node(object):
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children
+"""
+
+class Codec:
+    def serialize(self, root: 'Node') -> str:
+        """Encodes a tree to a single string.
+        
+        :type root: Node
+        :rtype: str
+        """
+        vals = []
+        def compose(node):
+            if not node:
+                return
+            vals.append(str(node.val))
+            vals.append("start")
+            for child in node.children:
+                compose(child)
+            vals.append("end")
+
+        compose(root)
+        print(vals)
+        return ",".join(vals)
+	
+    def deserialize(self, data: str) -> 'Node':
+        """Decodes your encoded data to tree.
+        
+        :type data: str
+        :rtype: Node
+        """
+        if not data:
+            return 
+        vals = data.split(",")
+        val = vals.pop(0)
+        root = Node(int(val), [])
+        def build(root):
+            if vals.pop(0) == "start":
+                child = vals.pop(0)
+                while child != "end":
+                    childnode = Node(int(child), [])
+                    root.children.append(build(childnode))
+                    child = vals.pop(0)
+                return root
+        return build(root)
