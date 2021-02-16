@@ -1,0 +1,14 @@
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+        wordset = set(wordDict)
+        @lru_cache(None)
+        def dfs(i):
+            if i == len(s):
+                return [[]]
+            res = []
+            for j in range(i, len(s) + 1):
+                if s[i:j] in wordset:
+                    for nextword in dfs(j):
+                        res.append([s[i:j]] + nextword)
+            return res
+        return [" ".join(x) for x in dfs(0)]
