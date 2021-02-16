@@ -1,0 +1,15 @@
+class Solution:
+    def countArrangement(self, n: int) -> int:
+        visit = [False] * (n + 1)
+        def dfs(i):
+            if i > n:
+                self.res += 1
+                return
+            for num in range(1, n + 1):
+                if not visit[num] and (not num % i or not i % num):
+                    visit[num] = True
+                    dfs(i + 1)
+                    visit[num] = False
+        self.res = 0
+        dfs(1)
+        return self.res
