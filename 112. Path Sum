@@ -1,0 +1,88 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
+        if not root:
+            return False
+        if not root.left and not root.right and root.val == targetSum:
+            return True
+        return self.hasPathSum(root.left, targetSum - root.val) or self.hasPathSum(root.right, targetSum - root.val)
+        
+ 113. Path Sum II
+ # Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def pathSum(self, root: TreeNode, targetSum: int) -> List[List[int]]:
+        if not root:
+            return []
+        def dfs(path, node, target):
+            if not node.left and not node.right:
+                if node.val == target:
+                    res.append(path)
+                return
+            for nextnode in [node.left, node.right]:
+                if nextnode:
+                    dfs(path + [nextnode.val], nextnode, target - node.val)
+        res = []
+        dfs([root.val], root, targetSum)
+        return res
+        
+ 437. Path Sum III
+ # Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def pathSum(self, root: TreeNode, sum: int) -> int:
+        def helper(node, target, delete):
+            if not node:
+                return 0
+            res = 0
+            if node.val == target:
+                res += 1
+            left = helper(node.left, target - node.val, False)
+            right = helper(node.right, target - node.val, False)
+            if delete:
+                left += helper(node.left, target, delete)
+                right += helper(node.right, target, delete)
+            return left + right + res
+        return helper(root, sum, True)
+       
+ 666. Path Sum IV
+ class Solution:
+    def pathSum(self, nums: List[int]) -> int:
+        nums = deque(nums)
+        root = TreeNode(nums.popleft() % 10)
+        queue = deque([(root, 1, 1)])
+        while queue:
+            node, pos, level = queue.popleft()
+            if nums and int(str(nums[0])[1]) == pos * 2 - 1 and level + 1 == int(str(nums[0])[0]):
+                num = nums.popleft()
+                node.left = TreeNode(num % 10)
+                queue.append((node.left, int(str(num)[1]), int(str(num)[0])))
+            if nums and int(str(nums[0])[1]) == pos * 2 and level + 1 == int(str(nums[0])[0]):
+                num = nums.popleft()
+                node.right = TreeNode(num % 10)
+                queue.append((node.right, int(str(num)[1]), int(str(num)[0])))
+            
+        
+        def dfs(node, presum):
+            if not node.left and not node.right:
+                self.res += presum
+                return
+            for nextnode in [node.left, node.right]:
+                if nextnode:
+                    dfs(nextnode, presum + nextnode.val)
+        self.res = 0
+        dfs(root, root.val)
+        return self.res
