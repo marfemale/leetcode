@@ -1,0 +1,13 @@
+class Solution:
+    def generateAbbreviations(self, word: str) -> List[str]:
+        res = []
+        n = len(word)
+        def dfs(i, path, cnt):
+            if i == n:
+                res.append(path + (str(cnt) if cnt else ""))
+                return
+            dfs(i + 1, path, cnt + 1)
+            dfs(i + 1, path + (str(cnt) if cnt else "") + word[i], 0)
+        
+        dfs(0, "", 0)
+        return res
