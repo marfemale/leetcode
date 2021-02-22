@@ -1,0 +1,31 @@
+class Solution:
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        keyword = "$"
+        trie = {}
+        for word in words:
+            node = trie
+            for letter in word:
+                node = node.setdefault(letter, {})
+            node[keyword] = word
+        m, n = len(board), len(board[0])
+        
+        def dfs(r, c, parent):
+            letter = board[r][c]
+            curnode = parent[letter]
+            match = curnode.pop(keyword, False)
+            if match:
+                res.append(match)
+            board[r][c] = "#"
+            for nr, nc in [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]:
+                if 0 <= nr < m and 0 <= nc < n and board[nr][nc] in curnode:
+                    dfs(nr, nc, curnode)
+            board[r][c] = letter
+            if not curnode:
+                parent.pop(letter)
+            
+        res = []
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] in trie:
+                    dfs(i, j, trie)
+        return res
