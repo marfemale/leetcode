@@ -1,0 +1,36 @@
+class Solution:
+    def minAbbreviation(self, target: str, dictionary: List[str]) -> str:
+        abbr = []
+        m = len(target)
+        
+        def generate(i, path, cnt):
+            if i == m:
+                abbr.append(path + ([str(cnt)] if cnt else []))
+                return
+            generate(i + 1, path, cnt + 1)
+            generate(i + 1, path + ([str(cnt)] if cnt else []) + [target[i]], 0)
+            
+        generate(0, [], 0)
+        abbr.sort(key = lambda x: len(x))
+
+        def check(abb, word):
+            i = j = 0
+            while True:
+                if i == len(abb) and j == len(word):
+                    return True
+                if i >= len(abb) or j >= len(word):
+                    return False
+                if abb[i].isdigit():
+                    step = int(abb[i])
+                    i += 1
+                    j += step
+                else:
+                    if abb[i] != word[j]:
+                        return False
+                    i += 1
+                    j += 1
+        
+        for abb in abbr:
+            if all(not check(abb, word) for word in dictionary):
+                return "".join(abb)
+    
