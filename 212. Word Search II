@@ -15,13 +15,14 @@ class Solution:
             match = curnode.pop(keyword, False)
             if match:
                 res.append(match)
+            if not curnode:
+                parent.pop(letter)
             board[r][c] = "#"
             for nr, nc in [(r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)]:
                 if 0 <= nr < m and 0 <= nc < n and board[nr][nc] in curnode:
                     dfs(nr, nc, curnode)
             board[r][c] = letter
-            if not curnode:
-                parent.pop(letter)
+
             
         res = []
         for i in range(m):
