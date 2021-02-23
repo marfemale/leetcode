@@ -1,0 +1,43 @@
+class Node:
+    def __init__(self):
+        self.child = defaultdict(Node)
+        self.isword = False
+        
+class Trie:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.root = Node()
+
+    def insert(self, word: str) -> None:
+        """
+        Inserts a word into the trie.
+        """
+        cur = self.root
+        for ch in word:
+            cur = cur.child[ch]
+        cur.isword = True
+
+    def search(self, word: str) -> bool:
+        """
+        Returns if the word is in the trie.
+        """
+        cur = self.root
+        for ch in word:
+            if ch not in cur.child:
+                return False
+            cur = cur.child[ch]
+        return cur.isword
+
+    def startsWith(self, prefix: str) -> bool:
+        """
+        Returns if there is any word in the trie that starts with the given prefix.
+        """
+        cur = self.root
+        for ch in prefix:
+            if ch not in cur.child:
+                return False
+            cur = cur.child[ch]
+        return True
