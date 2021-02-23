@@ -1,0 +1,10 @@
+class Solution:
+    def longestNiceSubstring(self, s: str) -> str:
+        #"Ya  z  aAayayy  z  aaa  z  ya"
+        chars = set(s)
+        i, res = 0, ""
+        for j, ch in enumerate(s):
+            if ch.swapcase() not in chars:
+                res = max(res, self.longestNiceSubstring(s[i:j]), key = len)
+                i = j + 1
+        return max(res, self.longestNiceSubstring(s[i:]), key = len) if i else s
