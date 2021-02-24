@@ -1,0 +1,58 @@
+class TrieNode:
+    def __init__(self):
+        self.child = defaultdict(TrieNode)
+        self.isword = False
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+        
+    def insert(self, word):
+        cur = self.root
+        for ch in word:
+            cur = cur.child[ch]
+        cur.isword = True
+        
+    def search(self, prefix):
+        cur = self.root
+        words = []
+        for ch in prefix:
+            cur = cur.child[ch]
+            if not cur:
+                return []
+        self.find(cur, prefix, words)
+        return words
+    
+    def find(self, cur, prefix, words):
+        if cur.isword:
+            words.append(prefix)
+        for ch, nextcur in cur.child.items():
+            self.find(nextcur, prefix + ch, words)
+            
+class WordFilter:
+
+    def __init__(self, words: List[str]):
+        self.table = {word: i for i, word in enumerate(words)}
+        self.trie1 = Trie()
+        self.trie2 = Trie()
+        self.cache1 = {}
+        self.cache2 = {}
+        for word in words:
+            self.trie1.insert(word)
+            self.trie2.insert(word[::-1])
+
+    def f(self, prefix: str, suffix: str) -> int:
+        if prefix in self.cache1:
+            words1 = self.cache1[prefix]
+        else:
+            words1 = self.trie1.search(prefix)
+            self.cache1[prefix] = words1      
+        if suffix in self.cache2:
+            words2 = self.cache2[suffix]
+        else:
+            words2 = [x[::-1] for x in self.trie2.search(suffix[::-1])]
+            self.cache2[suffix] = words2
+        common = set(words1) & set(words2)
+        res = -1
+        for word in common:
+            res = max(res, self.table[word])
+        return res
