@@ -1,0 +1,33 @@
+class Trie:
+    def __init__(self):
+        self.child = defaultdict(Trie)
+        self.isword = False
+        
+class WordDictionary:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.root = Trie()
+
+    def addWord(self, word: str) -> None:
+        cur = self.root
+        for ch in word:
+            cur = cur.child[ch]
+        cur.isword = True
+
+    def search(self, word: str) -> bool:
+        def helper(word, root):
+            cur = root
+            for i, ch in enumerate(word):
+                if ch not in cur.child:
+                    if ch == ".":
+                        for x in cur.child:
+                            if helper(word[i + 1:], cur.child[x]):
+                                return True
+                    return False
+                else:
+                    cur = cur.child[ch]
+            return cur.isword
+        return helper(word, self.root)
