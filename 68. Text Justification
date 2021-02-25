@@ -1,0 +1,54 @@
+class Solution:
+    def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
+        n = len(words)
+        wordlen, res, cur = 0, [], []
+        for i in range(len(words)):
+            if wordlen + len(cur) + len(words[i]) > maxWidth:
+                space = maxWidth - wordlen
+                if len(cur) > 1:
+                    q, r = space // (len(cur) - 1), space % (len(cur) - 1)
+                    for j in range(r):
+                        cur[j] += " "
+                    res.append((" " * q).join(cur))
+                else:
+                    res.append(cur[0] + " " * (maxWidth - wordlen))
+                cur, wordlen = [], 0
+            cur.append(words[i])
+            wordlen += len(words[i])
+        return res + [" ".join(cur) + " "* (maxWidth - wordlen - len(cur) + 1)]
+                
+                    
+#         def generate(i, j, wordlen):
+#             space = maxWidth - wordlen
+#             m = j - i
+#             if m:
+#                 q, r = space // m, space % m
+#                 res = ""
+#                 for k in range(i, j):
+#                     res += words[k] + " " * q
+#                     if r:
+#                         res += " "
+#                         r -= 1
+#                 return res + words[j]
+#             else:
+#                 return words[i] + " "*(maxWidth - wordlen)
+
+#         def split(i):
+#             wordlen = 0
+#             cnt = 0
+#             while i < n and wordlen + cnt + len(words[i]) <= maxWidth:
+#                 wordlen += len(words[i])
+#                 cnt += 1
+#                 i += 1
+#             return i - 1, wordlen
+        
+#         i = 0
+#         res = []
+#         while i < n:
+#             j, wordlen = split(i)
+#             if j != n - 1:
+#                 res.append(generate(i, j, wordlen))
+#             else:
+#                 res.append(" ".join(words[i:]) + " " * (maxWidth - wordlen - j + i))
+#             i = j + 1
+#         return res
