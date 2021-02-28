@@ -32,3 +32,19 @@ class Solution:
                     node = node.one or node.zero
             res = max(res, maxi)
         return res
+        
+        
+    class Solution:
+    def findMaximumXOR(self, nums: List[int]) -> int:
+        n = len(bin(max(nums))) - 2
+        maxor = 0
+        for i in range(n - 1, -1, -1):
+            maxor <<= 1
+            preset = set()
+            for num in nums:
+                pre = num >> i
+                preset.add(pre)
+                if maxor + 1 ^ pre in preset:
+                    maxor += 1
+                    break
+        return maxor
