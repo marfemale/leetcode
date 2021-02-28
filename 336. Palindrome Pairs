@@ -1,0 +1,33 @@
+class Trie:
+    def __init__(self):
+        self.child = defaultdict(Trie)
+        self.endword = -1
+        self.palsuf = []
+        
+class Solution:
+    def palindromePairs(self, words: List[str]) -> List[List[int]]:
+        trie = Trie()
+        for i, word in enumerate(words):
+            word = word[::-1]
+            cur = trie
+            for j, ch in enumerate(word):
+                if word[j:] == word[j:][::-1]:
+                    cur.palsuf.append(i)
+                cur = cur.child[ch]
+            cur.endword = i
+        res = []
+        for i, word in enumerate(words):
+            cur = trie
+            for j, ch in enumerate(word):
+                if cur.endword != -1:
+                    if word[j:] == word[j:][::-1]:
+                        res.append([i, cur.endword])
+                if ch not in cur.child:
+                    break
+                cur = cur.child[ch]
+            else:
+                if cur.endword != -1 and cur.endword != i:
+                    res.append([i, cur.endword])
+                for j in cur.palsuf:
+                    res.append([i, j])
+        return res
