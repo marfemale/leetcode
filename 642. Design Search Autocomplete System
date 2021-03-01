@@ -1,0 +1,38 @@
+class Trie:
+    def __init__(self):
+        self.child = defaultdict(Trie)
+        self.words = set()
+class AutocompleteSystem:
+
+    def __init__(self, sentences: List[str], times: List[int]):
+        self.root = Trie()
+        self.keyword = ""
+        self.time = defaultdict(int)
+        for i in range(len(sentences)):
+            cur = self.root
+            self.time[sentences[i]] = times[i]
+            for ch in sentences[i]:
+                cur = cur.child[ch]
+                cur.words.add(sentences[i])            
+
+    def input(self, c: str) -> List[str]:
+        if c != "#":
+            self.keyword += c
+            cur = self.root
+            for ch in self.keyword:
+                if ch not in cur.child:
+                    return []
+                cur = cur.child[ch]
+            wordlist = cur.words
+            res = []
+            for word in wordlist:
+                res.append((-self.time[word], word))
+            return [sen for ntime, sen in (sorted(res))[:3]]
+        else:
+            self.time[self.keyword] += 1
+            cur = self.root
+            for ch in self.keyword:
+                cur = cur.child[ch]
+                cur.words.add(self.keyword)
+            self.keyword = ""
+            return []
