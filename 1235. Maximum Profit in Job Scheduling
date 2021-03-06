@@ -1,0 +1,29 @@
+class Solution:
+    def jobScheduling(self, startTime: List[int], endTime: List[int], profit: List[int]) -> int:
+        n = len(startTime)
+        # schedule = []
+        # for i in range(n):
+        #     schedule.append((startTime[i], i + 1))
+        #     schedule.append((endTime[i], -i - 1))
+        # schedule.sort()
+        # pre = 0
+        # for _, i in schedule:
+        #     if i > 0:
+        #         profit[i - 1] += pre
+        #     else:
+        #         pre = max(pre, profit[-i - 1])
+        # return max(profit)
+        
+        endTime, startTime, profit = zip(*sorted(zip(endTime, startTime, profit)))
+        dp = [0] * (n + 1)
+        for i in range(1, n + 1):
+            j = bisect.bisect(endTime, startTime[i - 1])
+            dp[i] = max(dp[i - 1], profit[i - 1]+ dp[j])
+        return dp[n]
+    
+        startTime, endTime, profit = zip(*sorted(zip(startTime, endTime, profit)))
+        dp = [0 for _ in range(n+1)]
+        for i in range(n-1, -1, -1):
+            j = bisect.bisect_left(startTime, endTime[i])
+            dp[i] = max(dp[i+1], profit[i] + dp[j])
+        return dp[0]
