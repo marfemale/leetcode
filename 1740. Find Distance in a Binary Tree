@@ -1,0 +1,26 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def findDistance(self, root: TreeNode, p: int, q: int) -> int:
+        def find(root, p, q):
+            if not root or root.val == p or root.val == q:
+                return root
+            left = find(root.left, p, q)
+            right = find(root.right, p, q)
+            if left and right:
+                return root
+            return left or right
+        
+        def dis(node, target):
+            if not node:
+                return inf
+            if node.val == target:
+                return 0
+            return 1 + min(dis(node.left, target), dis(node.right, target))
+        
+        lca = find(root, p, q)
+        return dis(lca, p) + dis(lca, q)
