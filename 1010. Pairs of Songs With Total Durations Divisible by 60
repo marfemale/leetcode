@@ -1,0 +1,11 @@
+class Solution:
+    def numPairsDivisibleBy60(self, time: List[int]) -> int:
+        freq = defaultdict(int)
+        res = 0
+        for i in range(len(time)):
+            if time[i] % 60 == 0:
+                res += freq[0]
+            else:
+                res += freq[60 - time[i] % 60]
+            freq[time[i] % 60] += 1
+        return res
