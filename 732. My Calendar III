@@ -1,0 +1,18 @@
+class MyCalendarThree:
+
+    def __init__(self):
+        self.starts = []
+        self.ends = []
+        self.booking = 0
+
+    def book(self, start: int, end: int) -> int:
+        s, e = bisect.bisect_left(self.ends, start), bisect.bisect(self.starts, end)
+        bisect.insort(self.starts, start)
+        bisect.insort(self.ends, end)
+        hq = []
+        for i in range(s, e + 1):
+            while hq and hq[0] <= self.starts[i]:
+                heapq.heappop(hq)
+            heapq.heappush(hq, self.ends[i])
+            self.booking = max(self.booking, len(hq))
+        return self.booking
