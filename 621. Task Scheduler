@@ -1,0 +1,13 @@
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        c = Counter(tasks)
+        freq = sorted(c.values())
+        # maxf = freq.pop()
+        # idle = n * (maxf - 1)
+        # while freq:
+        #     idle -= min(maxf - 1, freq.pop())
+        # idle = max(0, idle)
+        # return idle + len(tasks)
+        maxf = freq[-1]
+        nmax = freq.count(maxf)
+        return max(len(tasks), (maxf - 1) * (n + 1) + nmax)
