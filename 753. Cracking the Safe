@@ -1,0 +1,23 @@
+class Solution:
+    def crackSafe(self, n: int, k: int) -> str:
+        #00, 01, 10, 11
+        def possible(path, i):
+            if i == n:
+                seen.add(path)
+                return
+            for x in range(k):
+                possible(path + str(x), i + 1)
+        
+        def dfs(nei):
+            for i in range(k):
+                nxt = nei + str(i)
+                if nxt in seen:
+                    seen.remove(nxt)
+                    dfs(nxt[1:])
+                    res.append(str(i))
+        seen, res = set(), []
+        possible("", 0)
+        dfs("0" * (n - 1))
+        if not seen:
+            return  "".join(res) + "0" * (n - 1) 
+        
