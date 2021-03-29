@@ -1,0 +1,18 @@
+class Solution:
+    def maxSum(self, nums1: List[int], nums2: List[int]) -> int:
+        presum1, presum2 = [0], [0]
+        for i in range(len(nums1)):
+            presum1.append(presum1[-1] + nums1[i])
+        for i in range(len(nums2)):
+            presum2.append(presum2[-1] + nums2[i])
+        map1 = {}
+        for i, num in enumerate(nums1):
+            map1[num] = i
+        res, anchor1, anchor2 = 0, 0, 0
+        for i, num in enumerate(nums2):
+            if num in map1:
+                res += max(presum1[map1[num] + 1] - presum1[anchor1], presum2[i + 1] - presum2[anchor2])
+                anchor1 = map1[num] + 1
+                anchor2 = i + 1
+        res += max(presum1[-1] - presum1[anchor1], presum2[-1] - presum2[anchor2])
+        return res % (10 ** 9 + 7)
