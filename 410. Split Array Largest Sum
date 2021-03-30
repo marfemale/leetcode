@@ -1,0 +1,20 @@
+class Solution:
+    def splitArray(self, nums: List[int], m: int) -> int:
+        def helper(n):
+            res, tmp = 1, 0
+            for num in nums:
+                if tmp + num > n:
+                    res += 1
+                    tmp = 0
+                tmp += num
+            return res
+        
+        left, right = max(nums), sum(nums)
+        while left <= right:
+            mid = (left + right) // 2
+            if helper(mid) <= m:
+                right = mid - 1
+            else:
+                left = mid + 1
+        return left
+        
