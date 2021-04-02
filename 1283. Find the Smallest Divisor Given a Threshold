@@ -1,0 +1,16 @@
+class Solution:
+    def smallestDivisor(self, nums: List[int], threshold: int) -> int:
+        def helper(n):
+            res = 0
+            for num in nums:
+                res += math.ceil(num / n)
+            return res
+        
+        left, right = 1, max(nums)
+        while left <= right:
+            mid = (left + right) // 2
+            if helper(mid) <= threshold:
+                right = mid - 1
+            else:
+                left = mid + 1
+        return left
