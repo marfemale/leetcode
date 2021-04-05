@@ -1,0 +1,16 @@
+class Solution:
+    def minmaxGasDist(self, stations: List[int], k: int) -> float:
+        def helper(dis):
+            res = 0
+            for i in range(len(stations) - 1):
+                res += int((stations[i + 1] - stations[i]) / dis)
+            return res
+        
+        left, right = 0, stations[-1] - stations[0]
+        while left + 10 ** -6 < right:
+            mid = (left + right) / 2
+            if helper(mid) <= k:
+                right = mid
+            else:
+                left = mid
+        return right
