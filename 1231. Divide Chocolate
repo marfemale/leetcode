@@ -1,0 +1,18 @@
+class Solution:
+    def maximizeSweetness(self, sweetness: List[int], K: int) -> int:
+        def helper(n):
+            tmp, res = 0, 0
+            for a in sweetness:
+                tmp += a
+                if tmp >= mid:
+                    res += 1
+                    tmp = 0
+            return res
+        left, right = min(sweetness), sum(sweetness) // (K + 1)
+        while left <= right:
+            mid = (left + right) // 2
+            if helper(mid) <= K:
+                right = mid - 1
+            else:
+                left = mid + 1
+        return right
