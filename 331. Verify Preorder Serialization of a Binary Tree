@@ -1,0 +1,18 @@
+class Solution:
+    def isValidSerialization(self, preorder: str) -> bool:
+        preorder = deque(preorder.split(","))
+        save = deque()
+        root = preorder.popleft()
+        if root != "#":
+            save.append(root)
+        while save and preorder:
+            node = save.popleft()
+            nodel = preorder.popleft()
+            if nodel != "#":
+                save.append(nodel)
+            if not preorder:
+                return False
+            noder = preorder.popleft()
+            if noder != "#":
+                save.append(noder)
+        return not save and not preorder
