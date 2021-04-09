@@ -1,0 +1,30 @@
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val=None, next=None):
+        self.val = val
+        self.next = next
+"""
+
+class Solution:
+    def insert(self, head: 'Node', insertVal: int) -> 'Node':
+        #1. not head, return single circular list
+        #2. ascending list, insert val at specific point
+        #3. all the same value list, insert val at any point
+        one = Node(insertVal)
+        if not head:
+            one.next = one
+            return one
+        cur = head.next
+        while cur != head:
+            if cur.val <= insertVal <= cur.next.val or (cur.val > cur.next.val and (insertVal < cur.next.val or insertVal > cur.val)):
+                tmp = cur.next
+                cur.next = one
+                one.next = tmp
+                return head
+            else:
+                cur = cur.next
+        tmp = cur.next
+        cur.next = one
+        one.next = tmp
+        return head
