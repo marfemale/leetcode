@@ -1,0 +1,29 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def recoverFromPreorder(self, S: str) -> TreeNode:
+        curD, num, root, stack = 0, "", None, []
+        for ch in S + "-":
+            if ch == "-":
+                if not num:
+                    curD += 1
+                else:
+                    cur = TreeNode(int(num))
+                    if not root:
+                        root = cur
+                    elif stack[-1][1] < curD:
+                        stack[-1][0].left = cur
+                    else:
+                        while stack[-1][1] >= curD:
+                            stack.pop()
+                        stack[-1][0].right = cur
+                    stack.append([cur, curD])
+                    num = ""
+                    curD = 1
+            else:
+                num += ch
+        return root
