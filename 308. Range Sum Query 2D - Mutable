@@ -1,0 +1,50 @@
+class NumMatrix:
+
+    def __init__(self, matrix: List[List[int]]):
+        self.m, self.n = len(matrix), len(matrix[0])
+        self.seg_tree = [[0] * (2 * self.n) for _ in range(2 * self.m)]
+        for i in range(self.m):
+            for j in range(self.n):
+                self.update(i, j, matrix[i][j])
+
+    def update(self, row: int, col: int, val: int) -> None:
+        m = row + self.m
+        n = col + self.n
+        diff = val - self.seg_tree[m][n]
+        while m > 0:
+            n = col + self.n
+            while n > 0:
+                self.seg_tree[m][n] += diff
+                n >>= 1
+            m >>= 1
+
+    def sumRegion(self, row1: int, col1: int, row2: int, col2: int) -> int:
+        res = 0
+        r1 = self.m + row1
+        r2 = self.m + row2
+        while r1 <= r2:
+            c1 = col1 + self.n
+            c2 = col2 + self.n
+            if r1 & 1:
+                res += self.sumRange(r1, c1, c2)
+                r1 += 1
+            if r2 & 1 == 0:
+                res += self.sumRange(r2, c1, c2)
+                r2 -= 1
+            r1 >>= 1
+            r2 >>= 1
+        return res
+    
+    def sumRange(self, row, col1, col2):
+        res = 0
+        while col1 <= col2:
+            if col1 & 1:
+                res += self.seg_tree[row][col1]
+                col1 += 1
+            if col2 & 1 == 0:
+                res += self.seg_tree[row][col2]
+                col2 -= 1
+            col1 >>= 1
+            col2 >>= 1
+        return res
+
