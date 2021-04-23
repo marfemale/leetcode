@@ -1,0 +1,36 @@
+class Segtree:
+    def __init__(self, n):
+        self.n = n
+        self.seg_tree = [0] * (2 * n)
+        
+    def update(self, index):
+        i = self.n + index
+        self.seg_tree[i] += 1
+        while i > 1:
+            self.seg_tree[i >> 1] = self.seg_tree[i] + self.seg_tree[i ^ 1]
+            i >>= 1
+            
+    def sumRange(self, i):
+        left, right = self.n, self.n + i
+        res = -self.seg_tree[right]
+        while left <= right:
+            if left & 1:
+                res += self.seg_tree[left]
+                left += 1
+            if right & 1 == 0:
+                res += self.seg_tree[right]
+                right -= 1
+            left >>= 1
+            right >>= 1
+        return res
+    
+class Solution:
+    def countSmaller(self, nums: List[int]) -> List[int]:
+        maps = {val : i for i, val in enumerate(sorted(nums))}
+        n = len(nums)
+        stree= Segtree(n)
+        res = [0] * n
+        for i in range(n - 1, -1, -1):
+            stree.update(maps[nums[i]])
+            res[i] = stree.sumRange(maps[nums[i]])
+        return res
