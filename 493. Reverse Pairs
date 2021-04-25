@@ -1,0 +1,27 @@
+class Solution:
+    def reversePairs(self, nums: List[int]) -> int:
+        def mergesort(head, tail):
+            mid = (head + tail) // 2
+            left, right = nums[head: mid + 1], nums[mid + 1: tail + 1]
+            i, j = 0, 0
+            m, n = len(left), len(right)
+            for k in range(head, tail + 1):
+                if j == n or (i < m and left[i] < right[j]):
+                    nums[k] = left[i]
+                    i += 1
+                else:
+                    nums[k] = right[j]
+                    j += 1
+                        
+        def helper(head, tail):
+            if head >= tail: return 0
+            mid = (head + tail) // 2
+            res = helper(head, mid) + helper(mid + 1, tail)
+            j = mid + 1
+            for i in range(head, mid + 1):
+                while j <= tail and nums[i] > nums[j] * 2:
+                    j += 1
+                res += j - mid - 1
+            mergesort(head, tail)
+            return res
+        return helper(0, len(nums) - 1)
