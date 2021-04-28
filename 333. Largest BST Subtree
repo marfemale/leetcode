@@ -1,0 +1,17 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def largestBSTSubtree(self, root: TreeNode) -> int:
+        def dfs(node):
+            if not node:
+                return 0, inf, -inf
+            leftc, leftmin, leftmax = dfs(node.left)
+            rightc, rightmin, rightmax = dfs(node.right)
+            if leftmax < node.val < rightmin:
+                return leftc + rightc + 1, min(leftmin, node.val), max(rightmax, node.val)
+            return max(leftc, rightc), -inf, inf
+        return dfs(root)[0]
