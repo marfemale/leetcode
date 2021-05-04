@@ -1,0 +1,28 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def distanceK(self, root: TreeNode, target: TreeNode, K: int) -> List[int]:
+        def dfs(node, parent = None):
+            if node:
+                node.par = parent
+                dfs(node.left, node)
+                dfs(node.right, node)
+        dfs(root)
+        q = deque([(target, 0)])
+        visit = {target}
+        res = []
+        while q:
+            node, depth = q.popleft()
+            if depth == K:
+                res.append(node.val)
+            for nei in [node.left, node.right, node.par]:
+                if nei and nei not in visit:
+                    q.append((nei, depth + 1))
+                    visit.add(nei)
+        return res
+        
