@@ -1,0 +1,20 @@
+class Solution:
+    def oddEvenJumps(self, arr: List[int]) -> int:
+        n = len(arr)
+        nh, nl = [0] * n, [0] * n
+        stack = []
+        for _, i in sorted([num, i] for i, num in enumerate(arr)):
+            while stack and stack[-1] < i:
+                nh[stack.pop()] = i
+            stack.append(i)
+        stack = []
+        for _, i in sorted([-num, i] for i, num in enumerate(arr)):
+            while stack and stack[-1] < i:
+                nl[stack.pop()] = i
+            stack.append(i)
+        high, low = [0] * n, [0] * n
+        high[n - 1] = low[n - 1] = 1
+        for i in range(n - 2, -1, -1):
+            high[i] = low[nh[i]]
+            low[i] = high[nl[i]]
+        return sum(high)
