@@ -1,0 +1,26 @@
+class Solution:
+    def largestPathValue(self, colors: str, edges: List[List[int]]) -> int:
+        n = len(colors)
+        graph = defaultdict(list)
+        indegree = {i : 0 for i in range(n)}
+        for s, e in edges:
+            graph[s].append(e)
+            indegree[e] += 1
+        q = deque()
+        cnt = [[0] * 26 for _ in range(n)]
+        for i in range(n):
+            if indegree[i] == 0:
+                q.append(i)
+                cnt[i][ord(colors[i]) - ord("a")] = 1
+        res, visit = 0, 0
+        while q:
+            node = q.popleft()
+            visit += 1
+            res = max(res, max(cnt[node]))
+            for nei in graph[node]:
+                for i in range(26):
+                    cnt[nei][i] = max(cnt[nei][i], cnt[node][i] + (i == ord(colors[nei]) - ord("a")))
+                indegree[nei] -= 1
+                if indegree[nei] == 0:
+                    q.append(nei)
+        return -1 if visit < n else res
