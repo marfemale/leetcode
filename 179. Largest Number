@@ -1,0 +1,7 @@
+class Solution:
+    def largestNumber(self, nums: List[int]) -> str:
+        def compatator(x, y):
+            return [1, -1][x + y > y + x]
+        nums = [str(num) for num in nums]
+        nums.sort(key = functools.cmp_to_key(compatator))
+        return "0" if nums[0] == "0" else "".join(nums)
