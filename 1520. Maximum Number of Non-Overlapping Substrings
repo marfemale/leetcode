@@ -1,0 +1,24 @@
+class Solution:
+    def maxNumOfSubstrings(self, s: str) -> List[str]:
+        pos = defaultdict(list)
+        for i, ch in enumerate(s):
+            pos[ch].append(i)
+        for ch in pos:
+            left, right = pos[ch][0], pos[ch][-1] + 1
+            tmpl, tmpr = left, right
+            while True:
+                for r in set(s[tmpl:tmpr]):
+                    tmpl = min(tmpl, pos[r][0])
+                    tmpr = max(tmpr, pos[r][-1] + 1)
+                if tmpl == left and tmpr == right:
+                    break
+                left, right = tmpl, tmpr
+            pos[ch] = [left, right]
+        posv = sorted(pos.values(), key = lambda x: x[1])
+        res = []
+        prev = 0
+        for start, end in posv:
+            if start >= prev:
+                res.append(s[start: end])
+                prev = end
+        return res
