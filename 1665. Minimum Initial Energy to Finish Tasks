@@ -1,0 +1,15 @@
+class Solution:
+    def minimumEffort(self, tasks: List[List[int]]) -> int:
+        res = 0
+        q = []
+        for acte, mine in tasks:
+            res += acte
+            heapq.heappush(q, (acte - mine, acte, mine))
+        cur = res
+        while q:
+            diff, acte, mine = heapq.heappop(q)
+            if cur < mine:
+                res += mine - cur
+                cur = mine
+            cur -= acte
+        return res
