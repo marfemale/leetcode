@@ -1,0 +1,10 @@
+class Solution:
+    def minTaps(self, n: int, ranges: List[int]) -> int:
+        dp = [inf] * (n + 1)
+        dp[0] = 0
+        for i in range(len(ranges)):
+            start = max(0, i - ranges[i])
+            end = min(n, i + ranges[i])
+            for j in range(start, end + 1):
+                dp[j] = min(dp[j], dp[start] + 1)
+        return dp[n] if dp[n] != inf else -1 
