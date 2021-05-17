@@ -1,0 +1,21 @@
+class Solution:
+    def maximumGap(self, nums: List[int]) -> int:
+        if len(nums) < 2:
+            return 0
+        n = len(bin(max(nums))) - 2
+        def radis(nums):
+            for i in range(n):
+                needle = 1 << i
+                one, zero = [], []
+                for num in nums:
+                    if num & needle:
+                        one.append(num)
+                    else:
+                        zero.append(num)
+                nums = zero + one
+            return nums
+        nums = radis(nums)
+        res = 0
+        for i in range(len(nums) - 1):
+            res = max(res, nums[i + 1] - nums[i])
+        return res
