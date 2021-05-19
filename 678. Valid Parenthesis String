@@ -1,0 +1,10 @@
+class Solution:
+    def checkValidString(self, s: str) -> bool:
+        left, lefts = 0, 0
+        for ch in s:
+            left += 1 if ch == "(" else -1
+            lefts += 1 if ch != ")" else -1
+            if lefts < 0:
+                break
+            left = max(left, 0)
+        return left == 0
