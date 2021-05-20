@@ -1,0 +1,19 @@
+class Solution:
+    def sumOfFlooredPairs(self, nums: List[int]) -> int:
+        nums.sort()
+        res = 0
+        cache = {}
+        for i, x in enumerate(nums):
+            if x in cache:
+                res += cache[x]
+            else:
+                cur = 0
+                j = i
+                while j < len(nums):
+                    k = nums[j] // x
+                    last = bisect.bisect_left(nums, (k + 1) * x)
+                    cur += (last - j) * k
+                    j = last
+                cache[x] = cur
+                res += cur
+        return res % (10 ** 9 + 7)
