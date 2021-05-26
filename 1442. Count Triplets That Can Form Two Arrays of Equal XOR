@@ -1,0 +1,12 @@
+class Solution:
+    def countTriplets(self, arr: List[int]) -> int:
+        dic = defaultdict(list)
+        presum = res = 0
+        dic[0].append(-1)
+        for i in range(len(arr)):
+            presum ^= arr[i]
+            if presum in dic:
+                for j in dic[presum]:
+                    res += i - j - 1
+            dic[presum].append(i)
+        return res
