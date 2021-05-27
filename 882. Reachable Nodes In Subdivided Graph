@@ -1,0 +1,26 @@
+class Solution:
+    def reachableNodes(self, edges: List[List[int]], maxMoves: int, n: int) -> int:
+        graph = defaultdict(dict)
+        for u, v, w in edges:
+            graph[u][v] = w
+            graph[v][u] = w
+        pq = [(0, 0)]
+        dis = {}
+        res = 0
+        while pq:
+            d, node = heapq.heappop(pq)
+            if node not in dis:
+                dis[node] = d
+                res += 1
+                for nei in graph[node]:
+                    if nei in dis:
+                        res += min(maxMoves - d, graph[node][nei])
+                    else:
+                        if d + graph[node][nei] + 1 <= maxMoves:
+                            heapq.heappush(pq, (d + graph[node][nei] + 1, nei))
+                            res += graph[node][nei]
+                            del graph[nei][node]
+                        else:
+                            res += maxMoves - d
+                            graph[nei][node] -= maxMoves - d
+        return res
