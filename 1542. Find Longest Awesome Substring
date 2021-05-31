@@ -1,0 +1,10 @@
+class Solution:
+    def longestAwesome(self, s: str) -> int:
+        mask, res, prefix = 0, 0, [-1] + [len(s)] * 1023
+        for i in range(len(s)):
+            mask ^= 1 << int(s[i])
+            prefix[mask] = min(i, prefix[mask])
+            res = max(res, i - prefix[mask])
+            for j in range(10):
+                res = max(res, i - prefix[mask ^ (1 << j)])
+        return res
