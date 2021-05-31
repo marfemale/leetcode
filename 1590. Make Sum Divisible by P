@@ -1,0 +1,10 @@
+class Solution:
+    def minSubarray(self, nums: List[int], p: int) -> int:
+        q, res, cur, pos = sum(nums) % p, inf, 0, {0: -1}
+        for i in range(len(nums)):
+            cur += nums[i]
+            r = cur % p
+            pos[r] = i
+            if (r - q) % p in pos:
+                res = min(res, i - pos[(r - q) % p])
+        return res if res < len(nums) else -1
