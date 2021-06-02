@@ -1,0 +1,19 @@
+class Solution:
+    def minSpeedOnTime(self, dist: List[int], hour: float) -> int:
+        def check(spd):
+            res = 0
+            for d in dist[:-1]:
+                res += math.ceil(d / spd)
+            res += dist[-1] / spd
+            return res
+        n = len(dist)
+        if n - 1 >= hour:
+            return -1
+        left, right = 1, max(max(dist), math.ceil(max(dist) / (hour - n + 1)))
+        while left <= right:
+            mid = (left + right) // 2
+            if check(mid) > hour:
+                left = mid + 1
+            else:
+                right = mid - 1
+        return left
